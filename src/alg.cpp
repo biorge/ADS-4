@@ -1,50 +1,62 @@
 // Copyright 2021 NNTU-CS
-int countPairs1(int *arr, int len, int value) {
-  int count = 0;
-  for (int i = 0; i < len - 1; i++) {
-    for (int j = i + 1; j < len; j++) {
-      if (arr[i] + arr[j] == value) count++;
-    }
-  }
-  return count;
-}
-int countPairs2(int *arr, int len, int value) {
-  int count = 0, left = 0;
-  int right = len - 1;
-  while (left < right) {
-    int sum = arr[left] + arr[right];
-    if (sum == value) {
-      count++;
-      left++;
-      right--;
-    } else if (sum < value) {
-      left++;
-    } else {
-      right--;
-    }
-  }
-  return count;
-}
-int binSearch(int* arr, int left, int right, int target) {
-  while (left <= right) {
-    int mid = left + (right - left) / 2;
-    if (arr[mid] == target)
-      return mid;
-    else if (arr[mid] < target)
-      left = mid + 1;
-    else
-      right = mid - 1;
-  }
-  return -1;
-}
-int countPairs3(int *arr, int len, int value) {
+int countPairs1(int* arr, int len, int value) {
   int count = 0;
   for (int i = 0; i < len; ++i) {
-    int sumElem = value - arr[i];
-    int index = binSearch(arr, i + 1, len - 1, sumElem);
-    if (index != -1 && arr[index] == sumElem) {
-      count++;
+    for (int j = i + 1; j < len; ++j) {
+      if (arr[i] + arr[j] == value) {
+        count++;
+      }
     }
   }
+  if (count == 0) return 0;
   return count;
+}
+
+int countPairs2(int* arr, int len, int value) {
+  int count = 0;
+  int x = len - 1;
+  while (arr[x] > value) {
+    x--;
+  }
+  for (int l = 0; l < x; l++) {
+    for (int r = x; l < r; r--) {
+      if (arr[l] + arr[r] == value) {
+        count++;
+      }
+    }
+  }
+  if (count == 0) return 0;
+  return count;
+}
+
+int countPairs3(int* arr, int len, int value) {
+  int count = 0;
+  for (int i = 0; i < len; ++i) {
+    int left = i + 1;
+    int right = len - 1;
+    int y = value - arr[i];
+    while (left <= right) {
+      int q = (left + right) / 2;
+      if (arr[q] == y) {
+        count++;
+        int mid = q - 1;
+        while ((mid > i) && (arr[mid] == arr[q])) {
+          count++;
+          mid--;
+        }
+        int na = q + 1;
+        while ((i < na) && (arr[na] == arr[q])) {
+          count++;
+          na++;
+        }
+        break;
+      } else if (arr[q] > y) {
+        right = q - 1;
+      } else {
+        left = q + 1;
+      }
+    }
+  }
+  if (count) return count;
+  return 0;
 }
