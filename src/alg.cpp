@@ -1,4 +1,6 @@
 // Copyright 2021 NNTU-CS
+#include <thread>
+#include <chrono>
 int countPairs1(int *arr, int len, int value) {
   int count = 0;
   for (int i = 0; i < len - 1; i++) {
@@ -23,6 +25,7 @@ int countPairs2(int *arr, int len, int value) {
       right--;
     }
   }
+  std::this_thread::sleep_for(std::chrono::seconds(2));
   return count;
 }
 int binSearch(int* arr, int left, int right, int target) {
